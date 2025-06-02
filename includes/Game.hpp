@@ -1,0 +1,32 @@
+//
+// Created by David Rynearson on 02.06.25.
+//
+
+#ifndef GAME_HPP
+#define GAME_HPP
+
+#include <SDL.h>
+#include "Player.hpp"
+#include "Level.hpp"
+
+class Game {
+public:
+    bool init(const char* title, int width, int height);
+    void run();
+    void cleanup();
+private:
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
+    bool isRunning = false;
+
+    Player player;
+    Level level;
+
+    void processInput();
+    void update(float deltaTime);
+    void render();
+};
+
+
+
+#endif //GAME_HPP
