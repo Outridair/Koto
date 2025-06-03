@@ -11,6 +11,8 @@
 #include "Tile.hpp"
 #include <SDL_image.h>
 
+#include "Enemy.hpp"
+
 const int FRAME_WIDTH = 32;
 const int FRAME_HEIGHT = 32;
 const int SPRITE_COLS = 4;
@@ -18,12 +20,15 @@ const int SPRITE_ROWS = 13;
 
 enum class Direction { Right, Left };
 
+inline float scale = 2.0f;
+
 class Player {
 public:
     void init(SDL_Renderer* renderer, int x, int y);
     void handleInput(const SDL_Event& e);
-    void update(float deltaTime, const std::vector<std::unique_ptr<Tile>>& tiles);
-    void render(SDL_Renderer* renderer);
+    void update(float deltaTime,
+                const std::vector<std::unique_ptr<Tile>>& tiles,
+                const std::vector<std::unique_ptr<Enemy>>& enemies);    void render(SDL_Renderer* renderer);
     void cleanup();
 
 private:

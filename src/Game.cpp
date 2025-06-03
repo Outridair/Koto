@@ -18,6 +18,7 @@ bool Game::init(const char *title, int width, int height) {
         return false;
     }
     player.init(renderer, 100, 500);
+    state = GameState::Playing;
 
     return isRunning;
 }
@@ -42,20 +43,42 @@ void Game::processInput() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) isRunning = false;
-        player.handleInput(e);
+        switch (state) {
+            case GameState::StartScreen:
+                break;
+            case GameState::Playing:
+                player.handleInput(e);
+                break;
+            case GameState::Paused:
+                break;
+            case GameState::GameOver:
+                break;
+
+        }
+
     }
 }
 
 void Game::update(float deltaTime) {
-    player.update(deltaTime, level.getTiles());
+    player.update(deltaTime, level.getTiles(),  level.getEnemies());
 }
 
 void Game::render() {
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
-    level.render(renderer);
-    player.render(renderer);
+    switch (state) {
+        case GameState::StartScreen:
+            break;
+        case GameState::Playing:
+            level.render(renderer);
+            player.render(renderer);
+            break;
+        case GameState::Paused:
+            break;
+        case GameState::GameOver:
+            break;
+    }
 
     SDL_RenderPresent(renderer);
 }

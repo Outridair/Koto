@@ -29,7 +29,7 @@ void Player::handleInput(const SDL_Event &e) {
                 break;
             case SDLK_SPACE:
                 if (!isJumping) {
-                    velY = -400;
+                    velY = -200;
                     isJumping = true;
                 }
                 break;
@@ -44,7 +44,7 @@ void Player::handleInput(const SDL_Event &e) {
     }
 }
 
-void Player::update(float deltaTime, const std::vector<std::unique_ptr<Tile> > &tiles) {
+void Player::update(float deltaTime, const std::vector<std::unique_ptr<Tile> > &tiles, const std::vector<std::unique_ptr<Enemy>>& enemies) {
     velY += 800 * deltaTime;
 
     rect.x += static_cast<int>(velX * deltaTime);
@@ -71,6 +71,19 @@ void Player::update(float deltaTime, const std::vector<std::unique_ptr<Tile> > &
     } else {
         currentFrame = 0;
     }
+    for (const auto& enemy : enemies) {
+        SDL_Rect enemyRect = enemy->getRect();
+
+        if (SDL_HasIntersection(&rect, &enemyRect)) {
+            // Reset position or handle defeat
+            rect.x = 100;
+            rect.y = 500;
+            velX = 0;
+            velY = 0;
+            isJumping = false;
+            SDL_Log("Hit an enemy! Resetting position.");
+        }
+    }
 }
 
 void Player::render(SDL_Renderer *renderer) {
@@ -86,8 +99,8 @@ void Player::render(SDL_Renderer *renderer) {
     SDL_Rect destRect = {
         rect.x,
         rect.y,
-        FRAME_WIDTH * 2,  // scale width
-        FRAME_HEIGHT * 2  // scale height
+        static_cast<int>(FRAME_WIDTH * scale),
+        static_cast<int>(FRAME_HEIGHT * scale)
     };
 
     SDL_RenderCopy(renderer, spriteSheet, &srcRect, &destRect);

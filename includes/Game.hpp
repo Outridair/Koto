@@ -9,6 +9,13 @@
 #include "Player.hpp"
 #include "Level.hpp"
 
+enum class GameState {
+    StartScreen,
+    Playing,
+    Paused,
+    GameOver
+};
+
 class Game {
 public:
     bool init(const char* title, int width, int height);
@@ -16,6 +23,8 @@ public:
     void cleanup();
     ~Game() { cleanup(); }
 private:
+    GameState state = GameState::StartScreen;
+
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
     bool isRunning = false;
