@@ -14,6 +14,7 @@ public:
     bool init(const char* title, int width, int height);
     void run();
     void cleanup();
+    ~Game() { cleanup(); }
 private:
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;

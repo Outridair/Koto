@@ -5,10 +5,18 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-
+#include <vector>
+#include <memory>
+#include "Tile.hpp"
 
 class Level {
+public:
+    void init();
+    void render(SDL_Renderer* renderer);
+    const std::vector<std::unique_ptr<Tile>> & getTiles() const;
 
+private:
+    std::vector<std::unique_ptr<Tile>> tiles;
 };
 
 
