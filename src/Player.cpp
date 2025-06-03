@@ -28,8 +28,20 @@ void Player::handleInput(const SDL_Event &e) {
                 facing = Direction::Right;
                 break;
             case SDLK_SPACE:
-                if (!isJumping) {
-                    velY = -200;
+                if (jumpCount < 3) {
+                    float jumpVelocity = baseJumpVelosity;
+                    float currentTime = SDL_GetTicks() / 1000.0f;
+
+                    if (jumpCount == 1 && currentTime - lastJumpTime <= jumpBoostWindow)
+                        jumpVelocity *= 1.2f;
+                    else if (jumpCount == 2 && (currentTime - lastJumpTime) <= jumpBoostWindow)
+                        jumpVelocity *= 1.4f;
+                    else if (jumpCount > 0)
+                        jumpVelocity = baseJumpVelosity;
+
+                    velY = jumpVelocity;
+                    lastJumpTime = currentTime;
+                    jumpCount++;
                     isJumping = true;
                 }
                 break;
@@ -52,12 +64,11 @@ void Player::update(float deltaTime, const std::vector<std::unique_ptr<Tile> > &
 
     for (const auto& tile : tiles) {
         SDL_Rect tRect = tile->getRect();
-        if (SDL_HasIntersection(&rect, &tRect)) {
-            if (velY > 0) { // Falling
-                rect.y = tRect.y - rect.h;
-                velY = 0;
-                isJumping = false;
-            }
+        if (velY > 0 && SDL_HasIntersection(&rect, &tRect)) {
+            rect.y = tRect.y - rect.h;
+            velY = 0;
+            isJumping = false;
+            jumpCount = 0;
         }
     }
 

@@ -30,6 +30,10 @@ public:
                 const std::vector<std::unique_ptr<Tile>>& tiles,
                 const std::vector<std::unique_ptr<Enemy>>& enemies);    void render(SDL_Renderer* renderer);
     void cleanup();
+    int jumpCount = 0;
+    float lastJumpTime = 0.0f;
+    float jumpBoostWindow = 0.2f;
+    float baseJumpVelosity = -400.0f; //Currently "Triple Jump is without landing" TODO fix.
 
 private:
     SDL_Rect rect;
