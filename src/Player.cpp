@@ -83,7 +83,14 @@ void Player::render(SDL_Renderer *renderer) {
         FRAME_HEIGHT
     };
 
-    SDL_RenderCopy(renderer, spriteSheet, &srcRect, &rect);
+    SDL_Rect destRect = {
+        rect.x,
+        rect.y,
+        FRAME_WIDTH * 2,  // scale width
+        FRAME_HEIGHT * 2  // scale height
+    };
+
+    SDL_RenderCopy(renderer, spriteSheet, &srcRect, &destRect);
 }
 
 void Player::cleanup() {
