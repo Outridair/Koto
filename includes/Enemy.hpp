@@ -12,11 +12,11 @@ class Enemy: public GameObject {
 public:
     Enemy(int x, int y, int w= 32, int h= 32);
     void update(float deltaTime) override {};
-    void render(SDL_Renderer* renderer) override;
-    SDL_Rect getRect() const;
+    void render(SDL_Renderer* renderer, const SDL_Rect& camera) override;
+    [[nodiscard]] SDL_Rect getRect() const;
 
 private:
-    SDL_Rect rect;
+    SDL_Rect rect{};
 };
 
 

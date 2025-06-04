@@ -10,9 +10,15 @@ Tile::Tile(int x, int y, int w, int h) {
     rect = {x, y, w, h};
 }
 
-void Tile::render(SDL_Renderer *renderer) {
+void Tile::render(SDL_Renderer *renderer, const SDL_Rect& camera) {
+    SDL_Rect drawRect = {
+        rect.x - camera.x,
+        rect.y - camera.y,
+        rect.w,
+        rect.h
+    };
     SDL_SetRenderDrawColor(renderer, 34, 139, 34, 255); // Green
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &drawRect);
 }
 
 SDL_Rect Tile::getRect() const {

@@ -9,12 +9,15 @@
 #include <memory>
 
 #include "Enemy.hpp"
+#include "Goal.hpp"
 #include "Tile.hpp"
 
 class Level {
+    std::unique_ptr<Goal> goal;
 public:
     void init();
-    void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer, const SDL_Rect& camera);
+    Goal* getGoal();
     const std::vector<std::unique_ptr<Tile>> & getTiles() const;
     const std::vector<std::unique_ptr<Enemy>>& getEnemies() const;
 

@@ -28,12 +28,17 @@ public:
     void handleInput(const SDL_Event& e);
     void update(float deltaTime,
                 const std::vector<std::unique_ptr<Tile>>& tiles,
-                const std::vector<std::unique_ptr<Enemy>>& enemies);    void render(SDL_Renderer* renderer);
+                const std::vector<std::unique_ptr<Enemy>>& enemies);
+    void render(SDL_Renderer* renderer, const SDL_Rect& camera) const;
     void cleanup();
     int jumpCount = 0;
     float lastJumpTime = 0.0f;
     float jumpBoostWindow = 0.2f;
     float baseJumpVelosity = -400.0f; //Currently "Triple Jump is without landing" TODO fix.
+    int getX() const { return rect.x; }
+    int getY() const { return rect.y; }
+    int getWidth() const { return rect.w; }
+    int getHeight() const { return rect.h; }
 
 private:
     SDL_Rect rect;

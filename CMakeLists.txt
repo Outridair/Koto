@@ -18,7 +18,11 @@ add_executable(koto src/main.cpp
         includes/Level.hpp
         src/Enemy.cpp
         includes/Enemy.hpp
-        includes/GameObject.hpp)
+        includes/GameObject.hpp
+        src/Camera.cpp
+        includes/Camera.hpp
+        src/Goal.cpp
+        includes/Goal.hpp)
 
 target_link_libraries(koto PRIVATE
         SDL2::SDL2            # brings in SDL2 headers & libs

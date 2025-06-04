@@ -3,6 +3,8 @@
 //
 
 #include "../includes/Game.hpp"
+#include "../includes/Camera.hpp"
+
 #include <iostream>
 
 bool Game::init(const char *title, int width, int height) {
@@ -17,6 +19,7 @@ bool Game::init(const char *title, int width, int height) {
         SDL_Log("Failed to init SDL_image: %s", IMG_GetError());
         return false;
     }
+    camera = new Camera(800, 600, 3200, 600);
     player.init(renderer, 100, 500);
     state = GameState::Playing;
 
@@ -61,6 +64,21 @@ void Game::processInput() {
 
 void Game::update(float deltaTime) {
     player.update(deltaTime, level.getTiles(),  level.getEnemies());
+    camera->update(player.getX(), player.getY());
+
+    // Manually construct the player's collision rect
+    SDL_Rect playerRect = {
+        player.getX(),
+        player.getY(),
+        player.getWidth(),  // You'll need to add this
+        player.getHeight()  // And this
+    };
+    SDL_Rect goalRect = level.getGoal()->getRect();
+
+    if (SDL_HasIntersection(&playerRect, &goalRect)) {
+        SDL_Log("Goal reached! You win!");
+        state = GameState::GameOver; // or another custom win state
+    }
 }
 
 void Game::render() {
@@ -70,10 +88,12 @@ void Game::render() {
     switch (state) {
         case GameState::StartScreen:
             break;
-        case GameState::Playing:
-            level.render(renderer);
-            player.render(renderer);
+        case GameState::Playing: {
+            SDL_Rect camView = camera->getView();
+            level.render(renderer, camView);
+            player.render(renderer, camView);
             break;
+        }
         case GameState::Paused:
             break;
         case GameState::GameOver:
@@ -89,6 +109,10 @@ void Game::cleanup() {
     IMG_Quit();
 
     player.cleanup();
+    if (camera) {
+        delete camera;
+        camera = nullptr;
+    }
 
     SDL_Quit();
 }

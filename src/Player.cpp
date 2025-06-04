@@ -97,7 +97,7 @@ void Player::update(float deltaTime, const std::vector<std::unique_ptr<Tile> > &
     }
 }
 
-void Player::render(SDL_Renderer *renderer) {
+void Player::render(SDL_Renderer *renderer, const SDL_Rect& camera) const {
     int row = (facing == Direction::Right) ? 10 : 8;
 
     SDL_Rect srcRect = {
@@ -108,8 +108,8 @@ void Player::render(SDL_Renderer *renderer) {
     };
 
     SDL_Rect destRect = {
-        rect.x,
-        rect.y,
+        rect.x - camera.x,
+        rect.y - camera.y,
         static_cast<int>(FRAME_WIDTH * scale),
         static_cast<int>(FRAME_HEIGHT * scale)
     };

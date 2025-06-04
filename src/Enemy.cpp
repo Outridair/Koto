@@ -8,9 +8,15 @@ Enemy::Enemy(int x, int y, int w, int h) {
     rect = { x, y, w, h};
 }
 
-void Enemy::render(SDL_Renderer *renderer) {
+void Enemy::render(SDL_Renderer *renderer, const SDL_Rect& camera) {
+    SDL_Rect drawRect = {
+        rect.x - camera.x,
+        rect.y - camera.y,
+        rect.w,
+        rect.h
+    };
     SDL_SetRenderDrawColor(renderer, 180, 0, 0, 255); // Red
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &drawRect);
 }
 
 SDL_Rect Enemy::getRect() const {

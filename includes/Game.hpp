@@ -8,6 +8,7 @@
 #include <SDL.h>
 #include "Player.hpp"
 #include "Level.hpp"
+#include "Camera.hpp"
 
 enum class GameState {
     StartScreen,
@@ -31,6 +32,7 @@ private:
 
     Player player;
     Level level;
+    Camera* camera = nullptr;
 
     void processInput();
     void update(float deltaTime);

@@ -10,7 +10,7 @@
 class Tile {
 public:
     Tile(int x, int y, int w, int h);
-    void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer, const SDL_Rect& camera);
     [[nodiscard]] SDL_Rect getRect() const;
 
 private:
