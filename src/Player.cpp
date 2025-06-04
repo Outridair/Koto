@@ -5,6 +5,7 @@
 #include "../includes/Player.hpp"
 
 void Player::init(SDL_Renderer* renderer, int x, int y) {
+    SDL_Log("Player::init - start");
     rect = { x, y, FRAME_WIDTH, FRAME_HEIGHT };
     SDL_Surface* surface = IMG_Load("../assets/player_sheet.png");
     if (!surface) {
@@ -14,6 +15,7 @@ void Player::init(SDL_Renderer* renderer, int x, int y) {
 
     spriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+    SDL_Log("Player::init - success");
 }
 
 void Player::handleInput(const SDL_Event &e) {

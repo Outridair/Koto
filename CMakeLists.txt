@@ -22,7 +22,12 @@ add_executable(koto src/main.cpp
         src/Camera.cpp
         includes/Camera.hpp
         src/Goal.cpp
-        includes/Goal.hpp)
+        includes/Goal.hpp
+        includes/Scene/Scene.hpp
+        src/Scene/PlayScene.cpp
+        includes/Scene/PlayScene.hpp
+        src/Scene/SceneManager.cpp
+        includes/Scene/SceneManager.hpp)
 
 target_link_libraries(koto PRIVATE
         SDL2::SDL2            # brings in SDL2 headers & libs

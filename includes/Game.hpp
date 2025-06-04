@@ -9,33 +9,28 @@
 #include "Player.hpp"
 #include "Level.hpp"
 #include "Camera.hpp"
-
-enum class GameState {
-    StartScreen,
-    Playing,
-    Paused,
-    GameOver
-};
+#include <SDL_ttf.h>
+#include <SDL_image.h>
+#include <memory>
+#include "Scene/Scene.hpp"
+#include "Scene/SceneManager.hpp"
+#include "Scene/PlayScene.hpp"
 
 class Game {
 public:
-    bool init(const char* title, int width, int height);
+    bool init(const char *title, int width, int height);
     void run();
     void cleanup();
-    ~Game() { cleanup(); }
-private:
-    GameState state = GameState::StartScreen;
 
+private:
+    SceneManager sceneManager;
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
+    TTF_Font* font = nullptr;
     bool isRunning = false;
-
-    Player player;
-    Level level;
-    Camera* camera = nullptr;
+    float deltaTime = 0.0f;
 
     void processInput();
-    void update(float deltaTime);
     void render();
 };
 

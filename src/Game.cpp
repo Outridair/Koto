@@ -5,25 +5,37 @@
 #include "../includes/Game.hpp"
 #include "../includes/Camera.hpp"
 
+
 #include <iostream>
 
 bool Game::init(const char *title, int width, int height) {
+    SDL_Log("[Game::init] Starting SDL_Init...");
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return false;
 
+    SDL_Log("[Game::init] Starting TTF_Init...");
+    if (TTF_Init() != 0) return false;
+
+    SDL_Log("[Game::init] Starting IMG_Init...");
+    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) return false;
+
+    SDL_Log("[Game::init] Opening font...");
+    font = TTF_OpenFont("../assets/Helvetica.ttc", 24);
+    if (!font) return false;
+
+    SDL_Log("[Game::init] Creating window...");
     window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
+    if (!window) return false;
+
+    SDL_Log("[Game::init] Creating renderer...");
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    isRunning = window && renderer;
+    if (!renderer) return false;
 
-    level.init();
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        SDL_Log("Failed to init SDL_image: %s", IMG_GetError());
-        return false;
-    }
-    camera = new Camera(800, 600, 3200, 600);
-    player.init(renderer, 100, 500);
-    state = GameState::Playing;
+    SDL_Log("[Game::init] Setting up PlayScene...");
+    sceneManager.setScene(std::make_unique<PlayScene>(renderer));
+    SDL_Log("Scene set.");
 
-    return isRunning;
+    isRunning = true;
+    return true;
 }
 
 void Game::run() {
@@ -31,14 +43,14 @@ void Game::run() {
 
     while (isRunning) {
         Uint32 currentTime = SDL_GetTicks();
-        float deltaTime = (currentTime - lastTime) / 1000.0f;
+        deltaTime = (currentTime - lastTime) / 1000.0f;
         lastTime = currentTime;
 
         processInput();
-        update(deltaTime);
+        sceneManager.update(deltaTime);
         render();
 
-        SDL_Delay(16); // ~60 FPS
+        SDL_Delay(16); // optional ~60 FPS cap
     }
 }
 
@@ -46,38 +58,7 @@ void Game::processInput() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) isRunning = false;
-        switch (state) {
-            case GameState::StartScreen:
-                break;
-            case GameState::Playing:
-                player.handleInput(e);
-                break;
-            case GameState::Paused:
-                break;
-            case GameState::GameOver:
-                break;
-
-        }
-
-    }
-}
-
-void Game::update(float deltaTime) {
-    player.update(deltaTime, level.getTiles(),  level.getEnemies());
-    camera->update(player.getX(), player.getY());
-
-    // Manually construct the player's collision rect
-    SDL_Rect playerRect = {
-        player.getX(),
-        player.getY(),
-        player.getWidth(),  // You'll need to add this
-        player.getHeight()  // And this
-    };
-    SDL_Rect goalRect = level.getGoal()->getRect();
-
-    if (SDL_HasIntersection(&playerRect, &goalRect)) {
-        SDL_Log("Goal reached! You win!");
-        state = GameState::GameOver; // or another custom win state
+        sceneManager.handleEvent(e);
     }
 }
 
@@ -85,20 +66,7 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
-    switch (state) {
-        case GameState::StartScreen:
-            break;
-        case GameState::Playing: {
-            SDL_Rect camView = camera->getView();
-            level.render(renderer, camView);
-            player.render(renderer, camView);
-            break;
-        }
-        case GameState::Paused:
-            break;
-        case GameState::GameOver:
-            break;
-    }
+    sceneManager.render(renderer);
 
     SDL_RenderPresent(renderer);
 }
@@ -106,13 +74,9 @@ void Game::render() {
 void Game::cleanup() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    IMG_Quit();
 
-    player.cleanup();
-    if (camera) {
-        delete camera;
-        camera = nullptr;
-    }
+    IMG_Quit();
+    TTF_Quit();
 
     SDL_Quit();
 }

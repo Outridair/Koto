@@ -23,11 +23,7 @@ void Level::render(SDL_Renderer *renderer, const SDL_Rect& camera) {
     for (const auto& enemy : enemies) {
         enemy->render(renderer, camera);
     }
-    if (goal) goal->render(renderer, camera);
-}
-
-Goal* Level::getGoal() {
-    return goal.get();
+    // if (goal) goal->render(renderer, camera);
 }
 
 const std::vector<std::unique_ptr<Tile>>& Level::getTiles() const {
