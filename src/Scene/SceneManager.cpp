@@ -5,7 +5,10 @@
 #include "../../includes/Scene/SceneManager.hpp"
 
 void SceneManager::setScene(std::unique_ptr<Scene> newScene) {
-    currentScene = std::move(newScene);
+    currentScene.reset();
+    SDL_Log("SceneManager::setScene called");
+    currentScene = std::move(newScene);  // 💥 This should destroy the old scene
+    SDL_Log("SceneManager::setScene - scene switched");
 }
 
 Scene* SceneManager::getCurrentScene() {

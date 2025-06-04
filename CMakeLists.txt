@@ -27,7 +27,9 @@ add_executable(koto src/main.cpp
         src/Scene/PlayScene.cpp
         includes/Scene/PlayScene.hpp
         src/Scene/SceneManager.cpp
-        includes/Scene/SceneManager.hpp)
+        includes/Scene/SceneManager.hpp
+        src/Scene/StartScene.cpp
+        includes/Scene/StartScene.hpp)
 
 target_link_libraries(koto PRIVATE
         SDL2::SDL2            # brings in SDL2 headers & libs

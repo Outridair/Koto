@@ -8,30 +8,25 @@
 
 #include <iostream>
 
+#include "../includes/Scene/StartScene.hpp"
+
 bool Game::init(const char *title, int width, int height) {
-    SDL_Log("[Game::init] Starting SDL_Init...");
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return false;
 
-    SDL_Log("[Game::init] Starting TTF_Init...");
     if (TTF_Init() != 0) return false;
 
-    SDL_Log("[Game::init] Starting IMG_Init...");
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) return false;
 
-    SDL_Log("[Game::init] Opening font...");
     font = TTF_OpenFont("../assets/Helvetica.ttc", 24);
     if (!font) return false;
 
-    SDL_Log("[Game::init] Creating window...");
     window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
     if (!window) return false;
 
-    SDL_Log("[Game::init] Creating renderer...");
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) return false;
 
-    SDL_Log("[Game::init] Setting up PlayScene...");
-    sceneManager.setScene(std::make_unique<PlayScene>(renderer));
+    sceneManager.setScene(std::make_unique<StartScene>(renderer, &sceneManager));
     SDL_Log("Scene set.");
 
     isRunning = true;
@@ -48,6 +43,7 @@ void Game::run() {
 
         processInput();
         sceneManager.update(deltaTime);
+
         render();
 
         SDL_Delay(16); // optional ~60 FPS cap

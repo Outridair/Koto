@@ -8,15 +8,16 @@
 #include "SDL.h"
 #include "GameObject.hpp"
 
-class Enemy: public GameObject {
+class Enemy : public GameObject {
 public:
-    Enemy(int x, int y, int w= 32, int h= 32);
-    void update(float deltaTime) override {};
-    void render(SDL_Renderer* renderer, const SDL_Rect& camera) override;
-    [[nodiscard]] SDL_Rect getRect() const;
+    Enemy(int x, int y, int w, int h);
 
+    void update(float deltaTime) override;
+    void render(SDL_Renderer* renderer, const SDL_Rect& camera) override;
+
+    SDL_Rect getRect() const;  // optional, not part of GameObject
 private:
-    SDL_Rect rect{};
+    SDL_Rect rect;
 };
 
 
