@@ -7,20 +7,19 @@
 
 #include <SDL.h>
 #include "Player.hpp"
-#include "Level.hpp"
 #include "Camera.hpp"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <memory>
-#include "Scene/Scene.hpp"
-#include "Scene/SceneManager.hpp"
-#include "Scene/PlayScene.hpp"
+#include "Scene/SceneBase.hpp"
+#include "SceneManager.hpp"
+#include "Scene/Level.hpp"
 
 class Game {
 public:
     bool init(const char *title, int width, int height);
     void run();
-    void cleanup();
+    void cleanup() const;
 
 private:
     SceneManager sceneManager;

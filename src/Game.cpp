@@ -3,12 +3,10 @@
 //
 
 #include "../includes/Game.hpp"
-#include "../includes/Camera.hpp"
-
 
 #include <iostream>
 
-#include "../includes/Scene/StartScene.hpp"
+#include "../includes/Scene/Title.hpp"
 
 bool Game::init(const char *title, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return false;
@@ -26,7 +24,7 @@ bool Game::init(const char *title, int width, int height) {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) return false;
 
-    sceneManager.setScene(std::make_unique<StartScene>(renderer, &sceneManager));
+    sceneManager.setScene(std::make_unique<Title>(renderer, &sceneManager));
     SDL_Log("Scene set.");
 
     isRunning = true;
@@ -38,7 +36,7 @@ void Game::run() {
 
     while (isRunning) {
         Uint32 currentTime = SDL_GetTicks();
-        deltaTime = (currentTime - lastTime) / 1000.0f;
+        deltaTime = static_cast<float>(currentTime - lastTime) / 1000.0f;
         lastTime = currentTime;
 
         processInput();
@@ -67,7 +65,7 @@ void Game::render() {
     SDL_RenderPresent(renderer);
 }
 
-void Game::cleanup() {
+void Game::cleanup() const {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

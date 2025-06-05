@@ -4,13 +4,11 @@
 
 #include "../includes/Tile.hpp"
 
-#include "../includes/Tile.hpp"
-
 Tile::Tile(int x, int y, int w, int h) {
     rect = {x, y, w, h};
 }
 
-void Tile::render(SDL_Renderer *renderer, const SDL_Rect& camera) {
+void Tile::render(SDL_Renderer *renderer, const SDL_Rect& camera) const {
     SDL_Rect drawRect = {
         rect.x - camera.x,
         rect.y - camera.y,

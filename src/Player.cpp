@@ -32,7 +32,8 @@ void Player::handleInput(const SDL_Event &e) {
             case SDLK_SPACE:
                 if (jumpCount < 3) {
                     float jumpVelocity = baseJumpVelosity;
-                    float currentTime = SDL_GetTicks() / 1000.0f;
+                    float currentTime = static_cast<float>(SDL_GetTicks()) / 1000.0f;
+
 
                     if (jumpCount == 1 && currentTime - lastJumpTime <= jumpBoostWindow)
                         jumpVelocity *= 1.2f;

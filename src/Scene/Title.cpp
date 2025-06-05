@@ -2,9 +2,9 @@
 // Created by David Rynearson on 04.06.25.
 //
 
-#include "../../includes/Scene/StartScene.hpp"
+#include "../../includes/Scene/Title.hpp"
 
-StartScene::StartScene(SDL_Renderer* renderer, SceneManager* sceneManager)
+Title::Title(SDL_Renderer* renderer, SceneManager* sceneManager)
     : renderer(renderer), sceneManager(sceneManager)
 {    font = TTF_OpenFont("../assets/Helvetica.ttc", 32);
     if (!font) {
@@ -24,19 +24,27 @@ StartScene::StartScene(SDL_Renderer* renderer, SceneManager* sceneManager)
     SDL_FreeSurface(surface);
 }
 
-void StartScene::handleEvent(const SDL_Event &e) {
+void Title::handleEvent(const SDL_Event &e) {
+    if (!sceneManager) {
+        SDL_Log("ERROR: sceneManager is null in TitleScene!");
+        return;
+    }
+    if (!renderer) {
+        SDL_Log("ERROR: renderer is null in TitleScene!");
+        return;
+    }
     if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) {
-        SDL_Log("StartScene: Switching to PlayScene");
-        sceneManager->setScene(std::make_unique<PlayScene>(renderer));
-
+        SDL_Log("StartScene: Switching to Level");
+        sceneManager->setScene(std::make_unique<Level>(renderer, sceneManager, 1));
+        SDL_Log("TitleScene: setScene returned (should be in Level now).");
     }
 }
 
-void StartScene::update(float) {
+void Title::update(float) {
     // Nothing needed here
 }
 
-void StartScene::render(SDL_Renderer* renderer) {
+void Title::render(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black
     SDL_RenderClear(renderer);
 
@@ -45,8 +53,8 @@ void StartScene::render(SDL_Renderer* renderer) {
     }
 }
 
-StartScene::~StartScene() {
-    SDL_Log("StartScene destructor");
+Title::~Title() {
+    SDL_Log("Title destructor");
 
     if (messageTexture) {
         SDL_DestroyTexture(messageTexture);
@@ -57,5 +65,5 @@ StartScene::~StartScene() {
         TTF_CloseFont(font);
         font = nullptr;
     }
-    SDL_Log("StartScene Deconstructed.");
+    SDL_Log("Title Deconstructed.");
 }

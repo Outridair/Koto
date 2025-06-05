@@ -15,9 +15,9 @@ public:
     void update(float deltaTime) override;
     void render(SDL_Renderer* renderer, const SDL_Rect& camera) override;
 
-    SDL_Rect getRect() const;  // optional, not part of GameObject
+    [[nodiscard]] SDL_Rect getRect() const;  // optional, not part of GameObject
 private:
-    SDL_Rect rect;
+    SDL_Rect rect{};
 };
 
 

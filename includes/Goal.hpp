@@ -12,10 +12,10 @@ public:
     Goal(int x, int y);
     void render(SDL_Renderer* renderer, const SDL_Rect& camera) override;
     void update(float deltaTime) override {} // Static goal
-    SDL_Rect getRect() const;
+    [[nodiscard]] SDL_Rect getRect() const;
 
 private:
-    SDL_Rect rect;
+    SDL_Rect rect{};
 };
 
 

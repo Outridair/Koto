@@ -14,8 +14,6 @@ add_executable(koto src/main.cpp
         includes/Player.hpp
         src/Tile.cpp
         includes/Tile.hpp
-        src/Level.cpp
-        includes/Level.hpp
         src/Enemy.cpp
         includes/Enemy.hpp
         includes/GameObject.hpp
@@ -23,13 +21,15 @@ add_executable(koto src/main.cpp
         includes/Camera.hpp
         src/Goal.cpp
         includes/Goal.hpp
-        includes/Scene/Scene.hpp
-        src/Scene/PlayScene.cpp
-        includes/Scene/PlayScene.hpp
-        src/Scene/SceneManager.cpp
-        includes/Scene/SceneManager.hpp
-        src/Scene/StartScene.cpp
-        includes/Scene/StartScene.hpp)
+        includes/Scene/SceneBase.hpp
+        src/Scene/Level.cpp
+        includes/Scene/Level.hpp
+        src/SceneManager.cpp
+        includes/SceneManager.hpp
+        src/Scene/Title.cpp
+        includes/Scene/Title.hpp
+        src/Scene/Overworld.cpp
+        includes/Scene/Overworld.hpp)
 
 target_link_libraries(koto PRIVATE
         SDL2::SDL2            # brings in SDL2 headers & libs

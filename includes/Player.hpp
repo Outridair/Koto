@@ -13,10 +13,10 @@
 
 #include "Enemy.hpp"
 
-const int FRAME_WIDTH = 32;
-const int FRAME_HEIGHT = 32;
-const int SPRITE_COLS = 4;
-const int SPRITE_ROWS = 13;
+constexpr int FRAME_WIDTH = 32;
+constexpr int FRAME_HEIGHT = 32;
+constexpr int SPRITE_COLS = 4;
+constexpr int SPRITE_ROWS = 13;
 
 enum class Direction { Right, Left };
 
@@ -35,13 +35,13 @@ public:
     float lastJumpTime = 0.0f;
     float jumpBoostWindow = 0.2f;
     float baseJumpVelosity = -400.0f; //Currently "Triple Jump is without landing" TODO fix.
-    int getX() const { return rect.x; }
-    int getY() const { return rect.y; }
-    int getWidth() const { return rect.w; }
-    int getHeight() const { return rect.h; }
+    [[nodiscard]] int getX() const { return rect.x; }
+    [[nodiscard]] int getY() const { return rect.y; }
+    [[nodiscard]] int getWidth() const { return rect.w; }
+    [[nodiscard]] int getHeight() const { return rect.h; }
 
 private:
-    SDL_Rect rect;
+    SDL_Rect rect = {};
     float velX = 0;
     float velY = 0;
     bool isJumping = false;
